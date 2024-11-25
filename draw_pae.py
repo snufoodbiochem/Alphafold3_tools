@@ -5,6 +5,7 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 
+#This script refers to google's scripts
 
 # --- Functions ---
 def extract_data(json_file_path):
