@@ -1,7 +1,7 @@
-AlphaFold3 매뉴얼
+Fasta2json input manual
 
 1. 입력 파일 준비
-AlphaFold3는 .fasta 파일 형식을 사용합니다. 입력 파일 준비는 아래 규칙을 따릅니다.
+.fasta 파일 형식을 사용합니다. 입력 파일 준비는 아래 규칙을 따릅니다.
 
 a. 기본 .fasta 파일 형식
 파일명은 반드시 .fasta로 끝나야 합니다.
@@ -68,15 +68,6 @@ SEP: Phosphorylated serine
 기타 PTM 목록
 
 2. 사용법
-AlphaFold3는 다양한 입력 파일 형식을 처리할 수 있습니다.
-
-a. .fasta → .json 변환
 python3 fasta2json.py <input_fasta>
 
-b. .fasta → .cif 변환
-단일 파일 변환:
-af3 <input_fasta>
-여러 파일 변환:
-.fasta 파일들을 하나의 디렉토리에 넣고 아래 명령 실행:
-af3_dir <input_dir>
 
