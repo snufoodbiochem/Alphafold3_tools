@@ -60,12 +60,16 @@ GATACAGACCATTTT
 
 ### e. For Ligands
 - Use the label `>ligand`. 
-- Ligands can include molecules such as ATP, ADP, and ions like Mg or Zn. For other ligands, use the **3-letter CCD code**.
+- Ligands can include molecules such as ATP, ADP, and ions like Mg2+ or Zn2+. For other ligands, use the **3-letter CCD code**.
 
 **Example:**
 ```fasta
 >ligand#2
 ATP
+>ligand
+MG2
+>ligand
+CU1
 ```
 
 - For a comprehensive list of CCD codes, refer to:  
@@ -178,12 +182,16 @@ GATACAGACCATTTT
 
 ### e. 리간드(Ligand)의 경우
 - 라벨은 `>ligand`로 지정합니다.
-- ATP, ADP와 같은 분자와 Mg, Zn과 같은 이온을 포함하며, 다른 리간드는 **3문자 CCD 코드**를 사용합니다.
+- ATP, ADP와 같은 분자와 Mg2+, Zn2+과 같은 이온을 포함하며, 다른 리간드는 **3문자 CCD 코드**를 사용합니다.
 
 **예:**
 ```fasta
 >ligand#2
 ATP
+>ligand
+ZN2
+>ligand
+CU1
 ```
 
 - 더 많은 CCD 코드는 다음 링크를 참고하세요:  
