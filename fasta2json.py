@@ -66,13 +66,13 @@ def parse_modifications(id_line, sequence_type):
 def fasta_to_json(fasta_file):
     # Generate the output JSON file name
     json_file = os.path.splitext(fasta_file)[0] + ".json"
-    
+
     # Extract the base name for "name" field
     json_name = os.path.splitext(os.path.basename(fasta_file))[0]
-    
+
     with open(fasta_file, "r") as file:
         lines = file.readlines()
-    
+
     sequences = []
     current_name = None
     current_sequence = []
@@ -98,48 +98,40 @@ def fasta_to_json(fasta_file):
                 elif "ligand" in current_name:
                     sequence_type = "ligand"
                 elif "smile" in current_name:
-                    sequence_type = "ligand"
+                    sequence_type = "smile"
 
                 modifications = parse_modifications(current_name, sequence_type)
 
-                if sequence_type == "protein":
+                if sequence_type in {"protein", "dna", "rna"}:
                     sequences.append({
-                        "protein": {
-                            "id": id_list,
-                            "sequence": "".join(current_sequence).replace(" ", "").upper(),
-                            "modifications": modifications
-                        }
-                    })
-                elif sequence_type == "dna":
-                    sequences.append({
-                        "dna": {
-                            "id": id_list,
-                            "sequence": "".join(current_sequence).replace(" ", "").upper(),
-                            "modifications": modifications
-                        }
-                    })
-                elif sequence_type == "rna":
-                    sequences.append({
-                        "rna": {
+                        sequence_type: {
                             "id": id_list,
                             "sequence": "".join(current_sequence).replace(" ", "").upper(),
                             "modifications": modifications
                         }
                     })
                 elif sequence_type == "ligand":
+                    ccdCodes = ["".join(current_sequence).replace(" ", "").upper()]
                     sequences.append({
                         "ligand": {
-                            "id": id_list[0] if sequence_type == "smile" else id_list,
-                            "ccdCodes" if sequence_type == "ligand" else "smiles": "".join(current_sequence).replace(" ", "").upper(),
+                            "id": id_list,
+                            "ccdCodes": ccdCodes
                         }
                     })
-            
+                elif sequence_type == "smile":
+                    sequences.append({
+                        "ligand": {
+                            "id": id_list,
+                            "smiles": "".join(current_sequence).replace(" ", "").upper()
+                        }
+                    })
+
             # Start a new sequence
             current_name = line[1:]
             current_sequence = []
         else:
             current_sequence.append(line)
-    
+
     # Add the last sequence
     if current_name is not None:
         name_parts = current_name.split("#")
@@ -160,42 +152,28 @@ def fasta_to_json(fasta_file):
 
         modifications = parse_modifications(current_name, sequence_type)
 
-        if sequence_type == "protein":
+        if sequence_type in {"protein", "dna", "rna"}:
             sequences.append({
-                "protein": {
-                    "id": id_list,
-                    "sequence": "".join(current_sequence).replace(" ", "").upper(),
-                    "modifications": modifications
-                }
-            })
-        elif sequence_type == "dna":
-            sequences.append({
-                "dna": {
-                    "id": id_list,
-                    "sequence": "".join(current_sequence).replace(" ", "").upper(),
-                    "modifications": modifications
-                }
-            })
-        elif sequence_type == "rna":
-            sequences.append({
-                "rna": {
+                sequence_type: {
                     "id": id_list,
                     "sequence": "".join(current_sequence).replace(" ", "").upper(),
                     "modifications": modifications
                 }
             })
         elif sequence_type == "ligand":
+            ccdCodes = ["".join(current_sequence).replace(" ", "").upper()]
             sequences.append({
                 "ligand": {
-                    "id": id_list[0] if sequence_type == "smile" else id_list,
-                    "ccdCodes" if sequence_type == "ligand" else "smiles": "".join(current_sequence).replace(" ", "").upper(),
+                    "id": id_list,
+                    "ccdCodes": ccdCodes
                 }
             })
+
         elif sequence_type == "smile":
             sequences.append({
                 "ligand": {
                     "id": id_list,
-                    "smiles": "".join(current_sequence).replace(" ", "").upper(),
+                    "smiles": "".join(current_sequence).replace(" ", "").upper()
                 }
             })
 
@@ -211,7 +189,7 @@ def fasta_to_json(fasta_file):
     # Write to JSON file
     with open(json_file, "w") as json_out:
         json.dump(data, json_out, indent=2)
-    print(f"Conversion complete. JSON file saved as {json_file}")
+    print(f"\nConversion complete. JSON file saved as {json_file}")
 
 
 # Check if the script is executed with a FASTA file as input
@@ -219,11 +197,12 @@ if __name__ == "__main__":
     if len(sys.argv) != 2:
         print("Usage: python script_name.py <fasta_file>")
         sys.exit(1)
-    
+
     fasta_file = sys.argv[1]
     if not os.path.exists(fasta_file):
         print(f"Error: File '{fasta_file}' not found.")
         sys.exit(1)
-    
+
     fasta_to_json(fasta_file)
+
 
