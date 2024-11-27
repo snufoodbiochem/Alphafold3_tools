@@ -67,9 +67,9 @@ GATACAGACCATTTT
 >ligand#2
 ATP
 >ligand
-MG2
+MG
 >ligand
-CU1
+CU
 ```
 
 - For a comprehensive list of CCD codes, refer to:  
@@ -189,9 +189,9 @@ GATACAGACCATTTT
 >ligand#2
 ATP
 >ligand
-ZN2
+ZN
 >ligand
-CU1
+CU
 ```
 
 - 더 많은 CCD 코드는 다음 링크를 참고하세요:  
