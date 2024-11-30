@@ -62,13 +62,13 @@ def parse_modifications(id_line, sequence_type):
             })
     return modifications
     
-    
-def parse_bonded_atom_pairs(id_line, id_prefix):
+
+def parse_bonded_atom_pairs(id_line, id_list):
     """
     Parse bonded atom pairs from the ID line.
 
     :param id_line: The ID line containing bonded atom information.
-    :param id_prefix: The ID prefix, such as "A".
+    :param id_list: A list of IDs corresponding to the sequence.
     :return: A list of bonded atom pairs in JSON-compatible format.
     """
     bonded_atom_pairs = []
@@ -80,10 +80,11 @@ def parse_bonded_atom_pairs(id_line, id_prefix):
         atom2_position = int(match[2])
         atom2_type = match[3]
 
-        bonded_atom_pairs.append([
-            [id_prefix, atom1_position, atom1_type],
-            [id_prefix, atom2_position, atom2_type]
-        ])
+        for id_prefix in id_list:  # Add bonded atom pairs for each ID
+            bonded_atom_pairs.append([
+                [id_prefix, atom1_position, atom1_type],
+                [id_prefix, atom2_position, atom2_type]
+            ])
 
     return bonded_atom_pairs
 
@@ -142,7 +143,7 @@ def fasta_to_json(fasta_file):
                         ccdCodes = ligand_sequence.split(',')
                     else:
                         ccdCodes = [ligand_sequence]
-                    bonded_atom_pairs.extend(parse_bonded_atom_pairs(current_name, id_list[0]))
+                    bonded_atom_pairs.extend(parse_bonded_atom_pairs(current_name, id_list))
                     sequences.append({
                         "ligand": {
                             "id": id_list,
@@ -197,7 +198,7 @@ def fasta_to_json(fasta_file):
                 ccdCodes = ligand_sequence.split(',')
             else:
                 ccdCodes = [ligand_sequence]
-            bonded_atom_pairs.extend(parse_bonded_atom_pairs(current_name, id_list[0]))
+            bonded_atom_pairs.extend(parse_bonded_atom_pairs(current_name, id_list))
             sequences.append({
                 "ligand": {
                     "id": id_list,
@@ -226,6 +227,7 @@ def fasta_to_json(fasta_file):
     with open(json_file, "w") as json_out:
         json.dump(data, json_out, indent=2)
     print(f"\nConversion complete. JSON file saved as {json_file}")
+
 
 
 
