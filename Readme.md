@@ -70,12 +70,9 @@ ATP
 MG
 >ligand
 CU
->ligand
+>ligand &1_O4_2_C1 # for atom link between O4 of NAG and C1 of FUC
 NAG,FUC
 ```
-- for atom link between the residues in ligand, add &<res num>_<atom name>_<res num>_<atom name>
->ligand &1_O4_2_C1
-NAG,FUC            
 
 - For a comprehensive list of CCD codes, refer to:  
 [EBI Ligand Search](https://www.ebi.ac.uk/pdbe-srv/pdbechem/)
