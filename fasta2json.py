@@ -61,6 +61,31 @@ def parse_modifications(id_line, sequence_type):
                 "position": position
             })
     return modifications
+    
+    
+def parse_bonded_atom_pairs(id_line, id_prefix):
+    """
+    Parse bonded atom pairs from the ID line.
+
+    :param id_line: The ID line containing bonded atom information.
+    :param id_prefix: The ID prefix, such as "A".
+    :return: A list of bonded atom pairs in JSON-compatible format.
+    """
+    bonded_atom_pairs = []
+    matches = re.findall(r"&(\d+)_([A-Za-z0-9]+)_(\d+)_([A-Za-z0-9]+)", id_line)
+
+    for match in matches:
+        atom1_position = int(match[0])
+        atom1_type = match[1]
+        atom2_position = int(match[2])
+        atom2_type = match[3]
+
+        bonded_atom_pairs.append([
+            [id_prefix, atom1_position, atom1_type],
+            [id_prefix, atom2_position, atom2_type]
+        ])
+
+    return bonded_atom_pairs
 
 
 def fasta_to_json(fasta_file):
@@ -77,6 +102,7 @@ def fasta_to_json(fasta_file):
     current_name = None
     current_sequence = []
     last_id_end = 0  # Track the last used letter index for IDs (0 = 'A')
+    bonded_atom_pairs = []
 
     for line in lines:
         line = line.strip()
@@ -111,7 +137,12 @@ def fasta_to_json(fasta_file):
                         }
                     })
                 elif sequence_type == "ligand":
-                    ccdCodes = ["".join(current_sequence).replace(" ", "").upper()]
+                    ligand_sequence = "".join(current_sequence).replace(" ", "").upper()
+                    if ',' in ligand_sequence:
+                        ccdCodes = ligand_sequence.split(',')
+                    else:
+                        ccdCodes = [ligand_sequence]
+                    bonded_atom_pairs.extend(parse_bonded_atom_pairs(current_name, id_list[0]))
                     sequences.append({
                         "ligand": {
                             "id": id_list,
@@ -161,14 +192,18 @@ def fasta_to_json(fasta_file):
                 }
             })
         elif sequence_type == "ligand":
-            ccdCodes = ["".join(current_sequence).replace(" ", "").upper()]
+            ligand_sequence = "".join(current_sequence).replace(" ", "").upper()
+            if ',' in ligand_sequence:
+                ccdCodes = ligand_sequence.split(',')
+            else:
+                ccdCodes = [ligand_sequence]
+            bonded_atom_pairs.extend(parse_bonded_atom_pairs(current_name, id_list[0]))
             sequences.append({
                 "ligand": {
                     "id": id_list,
                     "ccdCodes": ccdCodes
                 }
             })
-
         elif sequence_type == "smile":
             sequences.append({
                 "ligand": {
@@ -182,6 +217,7 @@ def fasta_to_json(fasta_file):
         "name": json_name,  # Use the base name of the input file
         "modelSeeds": [1],
         "sequences": sequences,
+        "bondedAtomPairs": bonded_atom_pairs,
         "dialect": "alphafold3",
         "version": 1
     }
@@ -190,6 +226,9 @@ def fasta_to_json(fasta_file):
     with open(json_file, "w") as json_out:
         json.dump(data, json_out, indent=2)
     print(f"\nConversion complete. JSON file saved as {json_file}")
+
+
+
 
 
 # Check if the script is executed with a FASTA file as input
@@ -204,5 +243,4 @@ if __name__ == "__main__":
         sys.exit(1)
 
     fasta_to_json(fasta_file)
-
-
+    print(f"\nThis code was created by NC Ha at SNU.")
