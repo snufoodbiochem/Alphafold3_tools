@@ -73,6 +73,9 @@ CU
 >ligand
 NAG,FUC
 ```
+- for atom link between the residues in ligand, add &<res num>_<atom name>_<res num>_<atom name>
+>ligand &1_O4_2_C1
+NAG,FUC            
 
 - For a comprehensive list of CCD codes, refer to:  
 [EBI Ligand Search](https://www.ebi.ac.uk/pdbe-srv/pdbechem/)
@@ -111,23 +114,23 @@ If cysteine at position 199 in oxyR dimer 1 is modified to cysteine sulfenic aci
 - **MYK**: Myristoyllysine  
 - **SEP**: Phosphorylated serine  
 - **TPO**: Phosphorylated threonine  
-- **NEP**:
-- **HIP**:
-- **ALY**:
-- **MLY**:
-- **M3L**:
-- **MLZ**:
-- **2MR**:
-- **AGM**:
-- **MCS**:
-- **HYP**:
-- **AHB**:
-- **SNN**:
-- **SNC**:
-- **TRF**:
-- **KCR**:
-- **CIR**:
-- **YHA**:
+- **NEP**: N1-PHOSPHONOHISTIDINE
+- **HIP**: ND1-PHOSPHONOHISTIDINE
+- **ALY**: N(6)-ACETYLLYSINE
+- **MLY**: N-DIMETHYL-LYSINE
+- **M3L**: N-TRIMETHYLLYSINE
+- **MLZ**: N-METHYL-LYSINE
+- **2MR**: N3, N4-DIMETHYLARGININE
+- **AGM**: 5-METHYL-ARGININE
+- **MCS**: MALONYL CYSTEINE
+- **HYP**: 4-HYDROXYPROLINE
+- **AHB**: BETA-HYDROXYASPARAGINE
+- **SNN**: L-3-AMINOSUCCINIMIDE
+- **SNC**: S-NITROSO-CYSTEINE
+- **TRF**: N1-FORMYL-TRYPTOPHAN
+- **KCR**: N-6-crotonyl-L-lysine
+- **CIR**: CITRULLINE
+- **YHA**: Homocitrulline
 ---
 **Common PTMs (3-letter codes) for DNA:**
 - 5CM, C34, 5HC, 6OG, 6MA, 1CC, 8OG, 5FC, 3DR
