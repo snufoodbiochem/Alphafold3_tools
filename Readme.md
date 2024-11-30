@@ -70,6 +70,8 @@ ATP
 MG
 >ligand
 CU
+>ligand
+NAG,FUC
 ```
 
 - For a comprehensive list of CCD codes, refer to:  
@@ -97,7 +99,7 @@ If cysteine at position 199 in oxyR dimer 1 is modified to cysteine sulfenic aci
 >oxyR &199_CSO #2
 ```
 
-**Common PTMs (3-letter codes):**
+**Common PTMs (3-letter codes) for amino acids:**
 - **3HY**: 3-hydroxylated proline  
 - **P1L**: S-palmitoyl-L-cysteine  
 - **PTR**: Phosphotyrosine  
@@ -109,8 +111,31 @@ If cysteine at position 199 in oxyR dimer 1 is modified to cysteine sulfenic aci
 - **MYK**: Myristoyllysine  
 - **SEP**: Phosphorylated serine  
 - **TPO**: Phosphorylated threonine  
-
+- **NEP**:
+- **HIP**:
+- **ALY**:
+- **MLY**:
+- **M3L**:
+- **MLZ**:
+- **2MR**:
+- **AGM**:
+- **MCS**:
+- **HYP**:
+- **AHB**:
+- **SNN**:
+- **SNC**:
+- **TRF**:
+- **KCR**:
+- **CIR**:
+- **YHA**:
 ---
+**Common PTMs (3-letter codes) for DNA:**
+- 5CM, C34, 5HC, 6OG, 6MA, 1CC, 8OG, 5FC, 3DR
+
+**Common PTMs (3-letter codes) for RNA:**
+-PSU, 5MC, OMC, 4OC, 5MU, OMU, UR3, A2M, MA6, 6MZ, 2MG, OMG, 7MG, RSQ
+
+I referred to https://github.com/google-deepmind/alphafold/blob/main/server/README.md to get the modification lists. 
 
 ## 2. Usage Instructions
 
