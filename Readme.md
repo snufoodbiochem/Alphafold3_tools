@@ -133,7 +133,7 @@ If cysteine at position 199 in oxyR dimer 1 is modified to cysteine sulfenic aci
 - 5CM, C34, 5HC, 6OG, 6MA, 1CC, 8OG, 5FC, 3DR
 
 **Common PTMs (3-letter codes) for RNA:**
--PSU, 5MC, OMC, 4OC, 5MU, OMU, UR3, A2M, MA6, 6MZ, 2MG, OMG, 7MG, RSQ
+- PSU, 5MC, OMC, 4OC, 5MU, OMU, UR3, A2M, MA6, 6MZ, 2MG, OMG, 7MG, RSQ
 
 I referred to https://github.com/google-deepmind/alphafold/blob/main/server/README.md to get the modification lists. 
 
