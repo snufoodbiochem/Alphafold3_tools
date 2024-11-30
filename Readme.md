@@ -70,7 +70,7 @@ ATP
 MG
 >ligand
 CU
->ligand &1_O4_2_C1 # for atom link between O4 of NAG and C1 of FUC
+>ligand &1_O4_2_C1                ;for atom link between O4 of NAG and C1 of FUC
 NAG,FUC
 ```
 
