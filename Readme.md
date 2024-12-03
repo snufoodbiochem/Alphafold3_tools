@@ -1,5 +1,5 @@
 
-# AlphaFold3 Input File Preparation and Usage Guide
+# fasta to json converter for alphafold 3 local version
 
 ## 1. How to Prepare the Input File for AlphaFold3
 
