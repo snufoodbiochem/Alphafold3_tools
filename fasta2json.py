@@ -154,7 +154,7 @@ def fasta_to_json(fasta_file):
                     sequences.append({
                         "ligand": {
                             "id": id_list,
-                            "smiles": "".join(current_sequence).replace(" ", "").upper()
+                            "smiles": "".join(current_sequence).replace(" ", "")
                         }
                     })
 
@@ -209,7 +209,7 @@ def fasta_to_json(fasta_file):
             sequences.append({
                 "ligand": {
                     "id": id_list,
-                    "smiles": "".join(current_sequence).replace(" ", "").upper()
+                    "smiles": "".join(current_sequence).replace(" ", "")
                 }
             })
 
