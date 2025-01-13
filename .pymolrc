@@ -1,27 +1,35 @@
 python
-
-#coloring in the Alphafold 3 pLDDT style by "F5" key
 #Just copy this file to $HOME
-
-from pymol import cmd
-
+from pymol import cmd, util
+#coloring in the Alphafold 3 pLDDT style by "F5" key
 def color_by_b_factor(selection="all"):
     cmd.select("b_90_up", f"({selection}) and b>90.0")  # B factor >= 90.0
     cmd.select("b_70_90", f"({selection}) and b>70.0 and b<90.0")  # 70.0 <= B factor < 90.0
     cmd.select("b_50_70", f"({selection}) and b>50.0 and b<70.0")  # 50.0 <= B factor < 70.0
     cmd.select("b_50_down", f"({selection}) and b<50.0")  # B factor < 50.0
-
     cmd.color("blue", "b_90_up")
     cmd.color("cyan", "b_70_90")
     cmd.color("yellow", "b_50_70")
     cmd.color("orange", "b_50_down")
-
     cmd.delete("b_90_up")
     cmd.delete("b_70_90")
     cmd.delete("b_50_70")
     cmd.delete("b_50_down")
-
 cmd.extend("color_by_b_factor", color_by_b_factor)
 cmd.set_key("F5", lambda: color_by_b_factor())
+#############################
+def color_chains_and_show_lines():
+    util.color_chains("(all and elem C)", _self=cmd)
+    cmd.show("lines", "all")
+cmd.extend("color_chains_and_show_lines", color_chains_and_show_lines)
+cmd.set_key("F7", lambda: cmd.do("color_chains_and_show_lines"))
+#############################
+def save_fasta_from_selection():
+        fasta_sequence = cmd.get_fastastr("sele")
+        output_file = "sele.fasta"
+        with open(output_file, 'w') as fasta_file:
+            fasta_file.write(fasta_sequence)
+        print(f"FASTA sequence saved to {output_file}")
+cmd.set_key("F8", save_fasta_from_selection)        # \ud30c\uc77c\uc5d0 FASTA \uc11c\uc5f4 \uc800\uc7a5
 
 python end
