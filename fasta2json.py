@@ -2,7 +2,7 @@ import json
 import sys
 import os
 import re
-
+import random
 
 def generate_ids_with_error_handling(start_index, count):
     max_ids = 52  # Maximum IDs from A to ZA
@@ -30,20 +30,12 @@ def generate_ids_with_error_handling(start_index, count):
 
     return ids
 
-
 def parse_modifications(id_line, sequence_type):
-    """
-    Parse modifications from the ID line.
-
-    :param id_line: The ID line from the FASTA file.
-    :param sequence_type: The type of the sequence (protein, dna, rna, or ligand).
-    :return: A list of modifications as dictionaries.
-    """
     modifications = []
     matches = re.findall(r"&(\d+)_([A-Za-z]{3})", id_line)
     for match in matches:
-        position = int(match[0])  # Extract the numeric position
-        mod_type = match[1]       # Extract the 3-letter modification type
+        position = int(match[0])
+        mod_type = match[1]
 
         if sequence_type == "protein":
             modifications.append({
@@ -62,15 +54,7 @@ def parse_modifications(id_line, sequence_type):
             })
     return modifications
     
-
 def parse_bonded_atom_pairs(id_line, id_list):
-    """
-    Parse bonded atom pairs from the ID line.
-
-    :param id_line: The ID line containing bonded atom information.
-    :param id_list: A list of IDs corresponding to the sequence.
-    :return: A list of bonded atom pairs in JSON-compatible format.
-    """
     bonded_atom_pairs = []
     matches = re.findall(r"&(\d+)_([A-Za-z0-9]+)_(\d+)_([A-Za-z0-9]+)", id_line)
 
@@ -80,7 +64,7 @@ def parse_bonded_atom_pairs(id_line, id_list):
         atom2_position = int(match[2])
         atom2_type = match[3]
 
-        for id_prefix in id_list:  # Add bonded atom pairs for each ID
+        for id_prefix in id_list:
             bonded_atom_pairs.append([
                 [id_prefix, atom1_position, atom1_type],
                 [id_prefix, atom2_position, atom2_type]
@@ -88,12 +72,8 @@ def parse_bonded_atom_pairs(id_line, id_list):
 
     return bonded_atom_pairs
 
-
 def fasta_to_json(fasta_file):
-    # Generate the output JSON file name
     json_file = os.path.splitext(fasta_file)[0] + ".json"
-
-    # Extract the base name for "name" field
     json_name = os.path.splitext(os.path.basename(fasta_file))[0]
 
     with open(fasta_file, "r") as file:
@@ -102,20 +82,18 @@ def fasta_to_json(fasta_file):
     sequences = []
     current_name = None
     current_sequence = []
-    last_id_end = 0  # Track the last used letter index for IDs (0 = 'A')
+    last_id_end = 0
     bonded_atom_pairs = []
 
     for line in lines:
         line = line.strip()
         if line.startswith(">"):
-            # Save the previous sequence if it exists
             if current_name is not None:
-                # Parse ID from current_name
                 name_parts = current_name.split("#")
                 name = name_parts[0]
                 count = int(name_parts[1]) if len(name_parts) > 1 else 1
                 id_list = generate_ids_with_error_handling(last_id_end, count)
-                last_id_end += count  # Update the last used index
+                last_id_end += count
 
                 sequence_type = "protein"
                 if "dna" in current_name:
@@ -158,19 +136,17 @@ def fasta_to_json(fasta_file):
                         }
                     })
 
-            # Start a new sequence
             current_name = line[1:]
             current_sequence = []
         else:
             current_sequence.append(line)
 
-    # Add the last sequence
     if current_name is not None:
         name_parts = current_name.split("#")
         name = name_parts[0]
         count = int(name_parts[1]) if len(name_parts) > 1 else 1
         id_list = generate_ids_with_error_handling(last_id_end, count)
-        last_id_end += count  # Update the last used index
+        last_id_end += count
 
         sequence_type = "protein"
         if "dna" in current_name:
@@ -213,27 +189,22 @@ def fasta_to_json(fasta_file):
                 }
             })
 
-    # Create the JSON structure
+    # Create random seed
+    model_seeds = [random.randint(1, 100000)]
+
     data = {
-        "name": json_name,  # Use the base name of the input file
-        "modelSeeds": [1],
+        "name": json_name,
+        "modelSeeds": model_seeds,
         "sequences": sequences,
         "bondedAtomPairs": bonded_atom_pairs,
         "dialect": "alphafold3",
         "version": 1
     }
 
-    # Write to JSON file
     with open(json_file, "w") as json_out:
         json.dump(data, json_out, indent=2)
     print(f"\nConversion complete. JSON file saved as {json_file}")
 
-
-
-
-
-
-# Check if the script is executed with a FASTA file as input
 if __name__ == "__main__":
     if len(sys.argv) != 2:
         print("Usage: python script_name.py <fasta_file>")
